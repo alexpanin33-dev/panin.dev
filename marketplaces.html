@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panin.dev | Стратегический Маркетинг на Маркетплейсах</title>
+    <meta name="description" content="Экспертное продвижение брендов на Wildberries, Ozon, Яндекс.Маркет. Юнит-экономика, стратегии, аналитика.">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --bg-body: #050505;
+            --bg-card: #101010;
+            --border: rgba(255, 255, 255, 0.08);
+            --text-primary: #F5F5F5;
+            --text-secondary: #A3A3A3;
+            --accent: #38BDF8;
+            --accent-2: #F472B6;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 45%), var(--bg-body);
+            color: var(--text-primary);
+            font-family: 'Manrope', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        .glass {
+            background: rgba(15, 15, 15, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            backdrop-filter: blur(18px);
+        }
+
+        .halo {
+            position: absolute;
+            inset: -200px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.25), transparent 50%);
+            opacity: 0.7;
+            filter: blur(30px);
+            pointer-events: none;
+        }
+
+        .bento-card {
+            position: relative;
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            padding: 2.25rem;
+            background: linear-gradient(140deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+            overflow: hidden;
+            transition: border-color .4s ease, transform .4s ease;
+        }
+
+        .bento-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform .8s ease;
+        }
+
+        .bento-card:hover {
+            border-color: rgba(255,255,255,0.25);
+            transform: translateY(-4px);
+        }
+
+        .bento-card:hover::after { transform: translateX(100%); }
+
+        .grid-noise::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .tagline {
+            letter-spacing: 0.35em;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .pulse-dot {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: #34D399;
+        }
+
+        .pulse-dot::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: inherit;
+            border: 1px solid rgba(52,211,153,0.4);
+            animation: ping 2s infinite;
+        }
+
+        @keyframes ping {
+            0% { transform: scale(0.5); opacity: 1; }
+            100% { transform: scale(1.8); opacity: 0; }
+        }
+
+        .stat-number { font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 800; }
+
+        .ticker {
+            display: flex;
+            gap: 2rem;
+            animation: marquee 24s linear infinite;
+            white-space: nowrap;
+            color: #ffffffaa;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        .process-step::before {
+            content: attr(data-step);
+            font-size: 0.75rem;
+            letter-spacing: 0.25em;
+            color: #6366F1;
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-item.active button { color: var(--accent); }
+        .faq-item.active .icon { transform: rotate(45deg); color: var(--accent); }
+
+        .neon-border {
+            position: relative;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(56,189,248,0.25);
+            overflow: hidden;
+        }
+
+        .neon-border::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: conic-gradient(from 90deg, rgba(56,189,248,0.7), rgba(244,114,182,0.7), rgba(56,189,248,0.7));
+            animation: spin 6s linear infinite;
+        }
+
+        .neon-border::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: rgba(5,5,5,0.9);
+            border-radius: inherit;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .case-card:hover .case-gradient { opacity: 1; }
+
+        .case-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(56,189,248,0.35), rgba(244,114,182,0.35));
+            opacity: 0;
+            transition: opacity .5s ease;
+            pointer-events: none;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 999px; }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.6rem; }
+            nav .tagline { letter-spacing: 0.2em; font-size: 0.55rem; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="halo"></div>
+<nav class="hidden md:flex gap-8 text-sm font-medium tracking-widest uppercase">
+            <a href="#about" class="hover:text-gray-400 transition-colors">dev.</a>
+            <a href="cases.html" class="hover:text-gray-400 transition-colors">Кейсы</a>
+            <a href="marketplaces.html" class="hover:text-orange-400 transition-colors text-orange-500">Маркетплейсы</a>
+            <a href="#contact" class="hover:text-gray-400 transition-colors">Контакт</a>
+        </nav>
+    <nav class="fixed top-0 w-full z-50 border-b border-white/10 bg-[#050505]/85 backdrop-blur-xl">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 bg-white rounded-full"></div>
+                <div>
+                    <a href="#" class="text-lg font-bold tracking-tight">PANIN.DEV</a>
+                    <div class="tagline hidden sm:block">E-COM OPERATING SYSTEM</div>
+                </div>
+            </div>
+          <nav class="hidden md:flex gap-8 text-sm font-medium tracking-widest uppercase">
+            <a href="#about" class="hover:text-gray-400 transition-colors">dev.</a>
+            <a href="cases.html" class="hover:text-gray-400 transition-colors">Кейсы</a>
+            <a href="marketplaces.html" class="hover:text-orange-400 transition-colors text-orange-500">Маркетплейсы</a>
+            <a href="#contact" class="hover:text-gray-400 transition-colors">Контакт</a>
+        </nav>
+            <div class="hidden md:flex items-center gap-4">
+                <label class="theme-toggle inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="theme-toggle" class="sr-only">
+                    <span class="slider"></span>
+                </label>
+                <a href="#contact" class="px-4 py-2 bg-white text-black text-sm font-bold rounded-full hover:bg-gray-200 transition">Связаться</a>
+            </div>
+            <button id="menu-btn" class="md:hidden"><i class="fa-solid fa-bars text-xl"></i></button>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-[#050505] z-40 translate-x-full transition-transform duration-300 flex flex-col pt-24 px-6 gap-6">
+        <a href="#competencies" class="text-2xl font-bold border-b border-white/10 pb-4 mobile-link">Компетенции</a>
+        <a href="#cases" class="text-2xl font-bold border-b border-white/10 pb-4 mobile-link">Кейсы</a>
+        <a href="#process" class="text-2xl font-bold border-b border-white/10 pb-4 mobile-link">Метод</a>
+        <a href="#contact" class="text-2xl font-bold border-b border-white/10 pb-4 mobile-link">Контакты</a>
+        <div class="flex items-center justify-between border border-white/10 rounded-xl p-4">
+            <span class="text-gray-400">Темная тема</span>
+            <label class="theme-toggle">
+                <input type="checkbox" id="mobile-theme-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <button id="close-menu" class="mt-4 text-xs tracking-[0.35em] text-gray-500 uppercase">Закрыть</button>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-6 pt-28 pb-24 space-y-32">
+        <section class="relative pt-20 grid gap-16 lg:grid-cols-[1.1fr_0.9fr] items-center">
+            <div class="space-y-8">
+                <div class="inline-flex items-center gap-3 px-4 py-2 border border-white/10 rounded-full text-xs text-gray-400">
+                    <span class="pulse-dot"></span>
+                    <span class="tracking-[0.3em]">ДОСТУПЕН ДЛЯ НОВЫХ ПРОЕКТОВ</span>
+                </div>
+                <div class="space-y-6">
+                    <p class="tagline">MARKETPLACE OPS + PERFORMANCE TEAM</p>
+                    <h1 class="hero-title text-5xl md:text-6xl font-extrabold leading-[1.05] tracking-tight">
+                        <span class="text-gradient">Системная матрица</span> вывода брендов в топ маркетплейсов
+                    </h1>
+                    <p class="text-lg text-gray-400 max-w-2xl">
+                        Проводим бренды через полный цикл: аналитика ниши → юнит-экономика → запуск и масштабирование. Штаб-квартира — Пермь, работа — по всему миру.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#contact" class="px-8 py-4 bg-white text-black font-semibold rounded-2xl text-center">Обсудить вашу задачу</a>
+                    <a href="#competencies" class="px-8 py-4 border border-white/15 rounded-2xl text-center hover:border-white/30 transition">Плейбук компетенций</a>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="glass p-4 rounded-2xl text-center">
+                        <div class="stat-number" data-target="120">0</div>
+                        <p class="text-xs uppercase text-gray-500 tracking-[0.3em]">Проектов</p>
+                    </div>
+                    <div class="glass p-4 rounded-2xl text-center">
+                        <div class="stat-number" data-target="150">0</div>
+                        <p class="text-xs uppercase text-gray-500 tracking-[0.3em]">ROI %</p>
+                    </div>
+                    <div class="glass p-4 rounded-2xl text-center">
+                        <div class="stat-number" data-target="40">0</div>
+                        <p class="text-xs uppercase text-gray-500 tracking-[0.3em]">Маржа</p>
+                    </div>
+                    <div class="glass p-4 rounded-2xl text-center">
+                        <div class="stat-number" data-target="6">0</div>
+                        <p class="text-xs uppercase text-gray-500 tracking-[0.3em]">Лет</p>
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="neon-border">
+                    <div class="relative z-10 p-8 space-y-6">
+                        <div class="flex items-center justify-between text-xs text-gray-500 uppercase tracking-[0.3em]">
+                            <span>Live Dashboard</span>
+                            <span>WB / Ozon</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-white/5 rounded-2xl">
+                                <p class="text-gray-400 text-xs">GMV 30 дней</p>
+                                <p class="text-3xl font-bold">48.2М₽</p>
+                                <span class="text-emerald-400 text-xs">+18% WoW</span>
+                            </div>
+                            <div class="p-4 bg-white/5 rounded-2xl">
+                                <p class="text-gray-400 text-xs">ACoS</p>
+                                <p class="text-3xl font-bold">7.4%</p>
+                                <span class="text-emerald-400 text-xs">ниже бенчмарка</span>
+                            </div>
+                            <div class="col-span-2 p-4 bg-white/5 rounded-2xl flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-400 text-xs">Unit Economics</p>
+                                    <p class="text-xl font-bold">Маржа 38.6%</p>
+                                </div>
+                                <div class="text-right text-xs text-gray-400">
+                                    <p>Чистая прибыль</p>
+                                    <p class="text-lg font-semibold text-white">6.9М₽</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border border-white/5 rounded-2xl p-4">
+                            <div class="flex items-center justify-between text-sm">
+                                <span>Риск‑профиль запуска</span>
+                                <span class="text-emerald-400 font-semibold">Low Risk</span>
+                            </div>
+                            <div class="mt-4 h-2 bg-white/5 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-sky-400 to-pink-400 w-[78%]"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="border border-white/10 rounded-3xl grid-noise relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-sky-500/5 via-transparent to-pink-500/5"></div>
+            <div class="relative grid md:grid-cols-[0.9fr_1.1fr]">
+                <div class="p-10 space-y-6 border-b md:border-b-0 md:border-r border-white/10">
+                    <p class="tagline">PRINCIPLES</p>
+                    <h2 class="text-3xl font-bold">Строгие фильтры отбора ниш</h2>
+                    <p class="text-gray-400">Если метрики не сходятся — проект не берём. Решения только на данных и проверенной юнит-экономике.</p>
+                    <ul class="space-y-4 text-sm text-gray-300">
+                        <li class="flex justify-between border-b border-white/5 pb-4"><span>Маржинальность</span><span class="font-mono text-white">≥ 40%</span></li>
+                        <li class="flex justify-between border-b border-white/5 pb-4"><span>ROI 9 мес</span><span class="font-mono text-white">≥ 120%</span></li>
+                        <li class="flex justify-between border-b border-white/5 pb-4"><span>Market Monopoly</span><span class="font-mono text-white">≤ 30%</span></li>
+                        <li class="flex justify-between"><span>Тренд направления</span><span class="font-mono text-emerald-400">Rising / Stable</span></li>
+                    </ul>
+                </div>
+                <div class="p-10 bg-black/20">
+                    <h3 class="text-sm text-gray-500 tracking-[0.35em] uppercase mb-6">Stop Factors</h3>
+                    <div class="space-y-6 text-sm text-gray-300">
+                        <div class="flex gap-4">
+                            <span class="text-pink-400 font-mono">01</span>
+                            <p>Товары с маржинальностью < 25% или без сценария окупаемости.</p>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="text-pink-400 font-mono">02</span>
+                            <p>Проекты без достаточного оборотного капитала / финансового буфера.</p>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="text-pink-400 font-mono">03</span>
+                            <p>Копирование чужих карточек и стратегии «на авось».</p>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="text-pink-400 font-mono">04</span>
+                            <p>Отсутствие доступа к производству или прозрачной логистике.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="competencies" class="space-y-10">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+                <div>
+                    <p class="tagline">COMPETENCY GRID</p>
+                    <h2 class="text-3xl font-bold">Bento-сетка компетенций</h2>
+                </div>
+                <div class="text-sm text-gray-400">Full stack сопровождение: от поиска поставщика до роста GMV</div>
+            </div>
+            <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+                <article class="bento-card">
+                    <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-rocket"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Запуск бренда</h3>
+                    <p class="text-gray-400 text-sm mb-6">Формируем юридическую конструкцию, SKU-матрицу и дорожную карту поставок.</p>
+                    <ul class="text-xs text-gray-400 space-y-2 font-mono">
+                        <li>/ Регистрация селлера</li>
+                        <li>/ FBS/FBO/FBY</li>
+                        <li>/ SOP для команды</li>
+                    </ul>
+                </article>
+                <article class="bento-card">
+                    <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Контент & Алгоритмы</h3>
+                    <p class="text-gray-400 text-sm mb-6">Комплексные карточки с rich-контентом, A/B тесты конверсии и SEO-матрицы.</p>
+                    <ul class="text-xs text-gray-400 space-y-2 font-mono">
+                        <li>/ ТехТЗ дизайнерам</li>
+                        <li>/ Семантика и FAQ</li>
+                        <li>/ Воронка отзывов</li>
+                    </ul>
+                </article>
+                <article class="bento-card">
+                    <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Performance Ads</h3>
+                    <p class="text-gray-400 text-sm mb-6">Собственные bid-скрипты и монитор позиций. Управление бюджетом по когортам.</p>
+                    <ul class="text-xs text-gray-400 space-y-2 font-mono">
+                        <li>/ WB & Ozon Ads</li>
+                        <li>/ Триггеры CTR</li>
+                        <li>/ Внешний трафик</li>
+                    </ul>
+                </article>
+                <article class="bento-card">
+                    <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Аналитика</h3>
+                    <p class="text-gray-400 text-sm mb-6">Финансовые модели, Cohort Analysis и сценарное планирование поставок.</p>
+                    <ul class="text-xs text-gray-400 space-y-2 font-mono">
+                        <li>/ Юнит-экономика</li>
+                        <li>/ Прогноз ROI</li>
+                        <li>/ Контроль маржи</li>
+                    </ul>
+                </article>
+                <article class="bento-card">
+                    <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-plane-departure"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Supply Chain</h3>
+                    <p class="text-gray-400 text-sm mb-6">Собственные QC-агенты в Китае, расчёт DDP, управление оборотным капиталом.</p>
+                    <ul class="text-xs text-gray-400 space-y-2 font-mono">
+                        <li>/ Sourcing 1688</li>
+                        <li>/ QC + инспекции</li>
+                        <li>/ Финансовые окна</li>
+                    </ul>
+                </article>
+                <article class="bento-card">
+                    <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">AI Ops</h3>
+                    <p class="text-gray-400 text-sm mb-6">NLP-анализ отзывов, генеративные фото, прогноз динамики цен и трендов.</p>
+                    <ul class="text-xs text-gray-400 space-y-2 font-mono">
+                        <li>/ Sentiment Radar</li>
+                        <li>/ Auto SEO Drafts</li>
+                        <li>/ Price foresight</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section id="cases" class="space-y-12">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                    <p class="tagline">CASE STUDIES</p>
+                    <h2 class="text-3xl font-bold">Три разных категории. Один результат — рост.</h2>
+                </div>
+                <a href="#contact" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white">
+                    Скачать PDF-кейсы <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="grid md:grid-cols-3 gap-5">
+                <article class="case-card relative border border-white/10 rounded-3xl p-6 overflow-hidden">
+                    <div class="case-gradient"></div>
+                    <div class="relative z-10 space-y-4">
+                        <div class="text-xs uppercase text-gray-400 tracking-[0.3em]">Fashion / Wildberries</div>
+                        <h3 class="text-2xl font-bold">Techwear</h3>
+                        <p class="text-sm text-gray-400">Реланс карточек, новая линейка аксессуаров, запуск DTC-рекламы.</p>
+                        <ul class="text-xs text-gray-300 space-y-2 font-mono">
+                            <li>GMV 4.2 → 12.8 млн</li>
+                            <li>ACoS 16% → 7.8%</li>
+                            <li>ROI 210%</li>
+                        </ul>
+                    </div>
+                </article>
+                <article class="case-card relative border border-white/10 rounded-3xl p-6 overflow-hidden">
+                    <div class="case-gradient"></div>
+                    <div class="relative z-10 space-y-4">
+                        <div class="text-xs uppercase text-gray-400 tracking-[0.3em]">Electronics / Ozon</div>
+                        <h3 class="text-2xl font-bold">HomeTech</h3>
+                        <p class="text-sm text-gray-400">BI-панель запасов, прогрев карточек и масштабирование внешнего трафика.</p>
+                        <ul class="text-xs text-gray-300 space-y-2 font-mono">
+                            <li>Выручка +186%</li>
+                            <li>Маржа 42%</li>
+                            <li>Поставки 21 дней</li>
+                        </ul>
+                    </div>
+                </article>
+                <article class="case-card relative border border-white/10 rounded-3xl p-6 overflow-hidden">
+                    <div class="case-gradient"></div>
+                    <div class="relative z-10 space-y-4">
+                        <div class="text-xs uppercase text-gray-400 tracking-[0.3em]">Beauty / Я.Маркет</div>
+                        <h3 class="text-2xl font-bold">Glow Lab</h3>
+                        <p class="text-sm text-gray-400">Создание новой SKU-линейки, собственный чат-бот поддержки клиентов.</p>
+                        <ul class="text-xs text-gray-300 space-y-2 font-mono">
+                            <li>Выход в ТОП‑5 категории</li>
+                            <li>NPS 4.8/5</li>
+                            <li>Повторные продажи +62%</li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="process" class="space-y-10">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                    <p class="tagline">OPERATING SYSTEM</p>
+                    <h2 class="text-3xl font-bold">Процесс внедрения</h2>
+                </div>
+                <p class="text-gray-400 max-w-xl">
+                    6-недельное окно, за которое проводим аудит, защищаем стратегию и разворачиваем операционную систему продаж.
+                </p>
+            </div>
+            <div class="grid lg:grid-cols-4 gap-6">
+                <div class="bento-card process-step" data-step="WEEK 01">
+                    <h3 class="font-bold mb-2">Диагностика</h3>
+                    <p class="text-sm text-gray-400">Интервью, выгрузки, оценка ассортимента и финмодели.</p>
+                </div>
+                <div class="bento-card process-step" data-step="WEEK 02">
+                    <h3 class="font-bold mb-2">Юнит‑модель</h3>
+                    <p class="text-sm text-gray-400">Строим P&L, определяем точки безубыточности и KPI.</p>
+                </div>
+                <div class="bento-card process-step" data-step="WEEKS 03‑04">
+                    <h3 class="font-bold mb-2">Карточки + Ads</h3>
+                    <p class="text-sm text-gray-400">Создаём контент, подключаем bid-боты, встраиваем внешний трафик.</p>
+                </div>
+                <div class="bento-card process-step" data-step="WEEKS 05‑06">
+                    <h3 class="font-bold mb-2">Масштабирование</h3>
+                    <p class="text-sm text-gray-400">Подключаем новые SKU, автоматизируем отчётность и контроль Cash Flow.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-8">
+            <div class="flex items-center justify-between">
+                <p class="tagline">LIVE SIGNALS</p>
+                <span class="text-sm text-gray-400">Обновление каждые 6 часов</span>
+            </div>
+            <div class="overflow-hidden border border-white/10 rounded-3xl p-6">
+                <div class="ticker">
+                    <span>WB TOP 15 · OZON ULTRA FAST · 98% FBS SLA · 0 CLAIMS WEEK 32</span>
+                    <span>WB TOP 15 · OZON ULTRA FAST · 98% FBS SLA · 0 CLAIMS WEEK 32</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
+            <div class="border border-white/10 rounded-3xl p-8 space-y-8">
+                <div class="space-y-3">
+                    <p class="tagline">OPS STACK</p>
+                    <h2 class="text-3xl font-bold">Операционная карта Panin.dev</h2>
+                    <p class="text-gray-400 max-w-2xl">Покрываем весь цикл: от первичного due diligence ниши до ежедневного контроля cash flow. Ниже — ключевые модули и артефакты, которые получает команда клиента.</p>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <article class="p-5 rounded-2xl border border-white/10 bg-white/5">
+                        <p class="text-xs tracking-[0.35em] text-gray-500">МОДУЛЬ 01</p>
+                        <h3 class="text-xl font-semibold mt-2">Strategy OS</h3>
+                        <p class="text-sm text-gray-400 mt-2">Нишевой скоринг, SKU-матрица, правила ассортимента, финансовые допущения.</p>
+                    </article>
+                    <article class="p-5 rounded-2xl border border-white/10 bg-white/5">
+                        <p class="text-xs tracking-[0.35em] text-gray-500">МОДУЛЬ 02</p>
+                        <h3 class="text-xl font-semibold mt-2">Growth Lab</h3>
+                        <p class="text-sm text-gray-400 mt-2">Контентные спринты, тестовые гипотезы, bid-боты и внешние источники трафика.</p>
+                    </article>
+                    <article class="p-5 rounded-2xl border border-white/10 bg-white/5">
+                        <p class="text-xs tracking-[0.35em] text-gray-500">МОДУЛЬ 03</p>
+                        <h3 class="text-xl font-semibold mt-2">Supply Control</h3>
+                        <p class="text-sm text-gray-400 mt-2">План поставок, DDP-калькуляции, контроль оборотного капитала и SLA складов.</p>
+                    </article>
+                    <article class="p-5 rounded-2xl border border-white/10 bg-white/5">
+                        <p class="text-xs tracking-[0.35em] text-gray-500">МОДУЛЬ 04</p>
+                        <h3 class="text-xl font-semibold mt-2">Revenue Desk</h3>
+                        <p class="text-sm text-gray-400 mt-2">BI-дэшборд, юнит-экономика, ревью KPI по когортам и управленческие митинги.</p>
+                    </article>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 text-xs text-gray-500 uppercase tracking-[0.35em]">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        <span>Delivery Timeline</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center font-mono text-sm">Week 1</div>
+                            <div>
+                                <p class="font-semibold">Аудит и due diligence</p>
+                                <p class="text-sm text-gray-400">Выгрузки, интервью, скоринг ниш, проверка маржинальности и спроса.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center font-mono text-sm">Week 2</div>
+                            <div>
+                                <p class="font-semibold">Финмодель и KPI</p>
+                                <p class="text-sm text-gray-400">P&L, точки безубыточности, запас ликвидности, сценарии по GMV.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center font-mono text-sm">Weeks 3-4</div>
+                            <div>
+                                <p class="font-semibold">Запуск Growth Lab</p>
+                                <p class="text-sm text-gray-400">Карточки, триггерные кампании, внешние каналы трафика и QA поставок.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center font-mono text-sm">Weeks 5-6</div>
+                            <div>
+                                <p class="font-semibold">Revenue Desk</p>
+                                <p class="text-sm text-gray-400">BI, регламент синков, контроль cash flow и расширение SKU-линейки.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border border-white/10 rounded-3xl p-8 space-y-6">
+                <div>
+                    <p class="tagline">FAQ</p>
+                    <h2 class="text-3xl font-bold">Частые вопросы</h2>
+                </div>
+                <div class="space-y-4" id="faq">
+                    <div class="faq-item border border-white/10 rounded-2xl overflow-hidden">
+                        <button class="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold">
+                            Как стартует проект?
+                            <span class="icon text-xl">+</span>
+                        </button>
+                        <div class="faq-content px-5 pb-4 text-sm text-gray-400 hidden">
+                            Сначала проводим экспресс-аудит (72 часа), затем защищаем стратегию и подписываем операционное соглашение с KPI.
+                        </div>
+                    </div>
+                    <div class="faq-item border border-white/10 rounded-2xl overflow-hidden">
+                        <button class="w-full flex items-center justify-between px-5 py-4 text-left текст-sm font-semibold">
+                            Какой формат оплаты?
+                            <span class="icon text-xl">+</span>
+                        </button>
+                        <div class="faq-content px-5 pb-4 text-sm text-gray-400 hidden">
+                            Фиксированная ставка + performance-бонус после достижения целевых KPI (GMV, маржа, ROI).
+                        </div>
+                    </div>
+                    <div class="faq-item border border-white/10 rounded-2xl overflow-hidden">
+                        <button class="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold">
+                            Чем мы отличаемся от агентств?
+                            <span class="icon text-xl">+</span>
+                        </button>
+                        <div class="faq-content px-5 pb-4 text-sm text-gray-400 hidden">
+                            Работаем как embedded-команда: доступ к BI, финансовой модели и ежедневным синкам, а не отчёт по итогам месяца.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="border border-white/10 rounded-3xl p-10 space-y-10">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                    <p class="tagline">CONTACT</p>
+                    <h2 class="text-3xl font-bold">Связаться с Panin.dev</h2>
+                    <p class="text-gray-400 mt-3">Работаем напрямую с собственниками и топ-менеджерами. Без посредников.</p>
+                </div>
+                <a href="https://t.me/alexpanin33" target="_blank" class="px-8 py-4 bg-white text-black rounded-2xl font-semibold text-center">Написать в Telegram</a>
+            </div>
+            <div class="grid md:grid-cols-3 gap-4">
+                <a href="tel:+79190236652" class="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-white/30 transition group">
+                    <div class="text-xs text-gray-400 tracking-[0.3em]">PHONE</div>
+                    <div class="text-2xl font-bold mt-3 group-hover:text-white">+7 (919) 023-66-52</div>
+                </a>
+                <a href="mailto:hello@panin.dev" class="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-white/30 transition group">
+                    <div class="text-xs text-gray-400 tracking-[0.3em]">EMAIL</div>
+                    <div class="text-2xl font-bold mt-3 group-hover:text-white">hello@panin.dev</div>
+                </a>
+                <a href="https://wa.me/79190236652" target="_blank" class="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-white/30 transition group">
+                    <div class="text-xs text-gray-400 tracking-[0.3em]">WHATSAPP</div>
+                    <div class="text-2xl font-bold mt-3 group-hover:text-white">chat 24/7</div>
+                </a>
+            </div>
+            <div class="flex flex-wrap gap-6 text-sm text-gray-400">
+                <a href="https://vk.com/alexpanin33" class="hover:text-white flex items-center gap-2"><i class="fab fa-vk"></i> VK</a>
+                <a href="https://wa.me/79190236652" class="hover:text-white flex items-center gap-2"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                <a href="https://t.me/alexpanin33" class="hover:text-white flex items-center gap-2"><i class="fab fa-telegram"></i> Telegram</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/10 py-10">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+            <div>
+                © 2025 · ИП Панин А.В. · Партнер Ozon Global Seller Program · Эксперт VK Ads
+            </div>
+            <div class="font-mono tracking-[0.35em] text-xs">DESIGNED FOR PERFORMANCE</div>
+        </div>
+    </footer>
+
+    <button id="cta-float" class="fixed bottom-6 right-6 px-6 py-3 rounded-2xl bg-white text-black font-semibold shadow-2xl flex items-center gap-2">
+        <i class="fa-solid fa-message"></i>
+        Запрос консультации
+    </button>
+
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const closeMenu = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        const themeToggle = document.getElementById('theme-toggle');
+        const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+        const ctaFloat = document.getElementById('cta-float');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+            document.body.classList.toggle('mobile-menu-open');
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        closeMenu.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+        function syncTheme(checked) {
+            document.documentElement.classList.toggle('dark', checked);
+            themeToggle.checked = checked;
+            mobileThemeToggle.checked = checked;
+        }
+
+        themeToggle.addEventListener('change', e => syncTheme(e.target.checked));
+        mobileThemeToggle.addEventListener('change', e => syncTheme(e.target.checked));
+
+        document.querySelectorAll('.stat-number').forEach(counter => {
+            const target = +counter.dataset.target;
+            const step = target / 200;
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        let current = 0;
+                        const update = () => {
+                            current += step;
+                            if (current < target) {
+                                counter.textContent = Math.round(current);
+                                requestAnimationFrame(update);
+                            } else {
+                                counter.textContent = target;
+                            }
+                        };
+                        update();
+                        observer.unobserve(counter);
+                    }
+                });
+            }, { threshold: 0.6 });
+            observer.observe(counter);
+        });
+
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const btn = item.querySelector('button');
+            const content = item.querySelector('.faq-content');
+            btn.addEventListener('click', () => {
+                const isOpen = item.classList.contains('active');
+                faqItems.forEach(i => {
+                    i.classList.remove('active');
+                    i.querySelector('.faq-content').classList.add('hidden');
+                });
+                if (!isOpen) {
+                    item.classList.add('active');
+                    content.classList.remove('hidden');
+                }
+            });
+        });
+
+        ctaFloat.addEventListener('click', () => {
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        const observerOptions = { threshold: 0.15 };
+        const animatedElements = document.querySelectorAll('.bento-card, .case-card, section');
+        const fadeObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        animatedElements.forEach(el => {
+            el.classList.add('fade-in-up');
+            fadeObserver.observe(el);
+        });
+    </script>
+</body>
+</html>

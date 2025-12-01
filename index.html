@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panin.dev | Digital Business Architect</title>
+    <meta name="description" content="12 лет опыта: Веб-разработка, SEO, Реклама.">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Unbounded:wght@300;400;600;800&display=swap');
+
+        :root {
+            --bg-color: #030303;
+            --grid-color: #1a1a1a;
+            --accent-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Unbounded', sans-serif;
+        }
+
+        /* 3D Parallax Cards */
+        .parallax-card {
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+        }
+        
+        /* Inner content that floats */
+        .parallax-content {
+            transform: translateZ(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .parallax-float-strong {
+            transform: translateZ(40px);
+        }
+
+        /* Grid Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+                              linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+            opacity: 0.5;
+        }
+
+        /* Particles Canvas */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Full Screen Gradient Overlays */
+        #gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-out; /* Speed up: Fast fade out */
+            mix-blend-mode: screen;
+        }
+        
+        #gradient-overlay.visible {
+            opacity: 1;
+            transition: opacity 0.1s ease-out; /* Active: Sharp fade in */
+        }
+
+        /* Specific Gradient Classes - Expanded & Brighter */
+        .bg-gradient-blue {
+            background-image: radial-gradient(circle at 50% 50%, rgba(43, 50, 178, 0.6) 0%, rgba(20, 136, 204, 0.3) 50%, transparent 100%);
+        }
+        .bg-gradient-purple {
+            background-image: radial-gradient(circle at 50% 50%, rgba(142, 45, 226, 0.5) 0%, rgba(74, 0, 224, 0.3) 50%, transparent 100%);
+        }
+        /* Replaced Orange/Red with Gold */
+        .bg-gradient-gold {
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.5) 0%, rgba(218, 32, 94, 0.3) 50%, transparent 100%);
+        }
+        .bg-gradient-green {
+            background-image: radial-gradient(circle at 50% 50%, rgba(17, 153, 142, 0.5) 0%, rgba(56, 239, 125, 0.3) 50%, transparent 100%);
+        }
+        .bg-gradient-red {
+            background-image: radial-gradient(circle at 50% 50%, rgba(153, 17, 17, 0.5) 0%, rgba(149, 28, 4, 0.3) 50%, transparent 100%);
+        }
+        /* New Unique Gradients */
+        .bg-gradient-cyan { background-image: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.6) 0%, rgba(34, 211, 238, 0.3) 50%, transparent 100%); }
+        .bg-gradient-orange { background-image: radial-gradient(circle at 50% 50%, rgba(249, 115, 22, 0.6) 0%, rgba(251, 146, 60, 0.3) 50%, transparent 100%); }
+        .bg-gradient-pink { background-image: radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.6) 0%, rgba(244, 114, 182, 0.3) 50%, transparent 100%); }
+        .bg-gradient-teal { background-image: radial-gradient(circle at 50% 50%, rgba(20, 184, 166, 0.6) 0%, rgba(45, 212, 191, 0.3) 50%, transparent 100%); }
+        .bg-gradient-indigo { background-image: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.6) 0%, rgba(129, 140, 248, 0.3) 50%, transparent 100%); }
+
+        /* Utilities */
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff, #666666);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Scroll Animation Classes */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .line-reveal {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .line-reveal::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: white;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.8s ease;
+        }
+
+        .line-reveal.active::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Hover Effects */
+        .hover-invert {
+            transition: color 0.3s, background-color 0.3s;
+        }
+        .hover-invert:hover {
+            background-color: white;
+            color: black;
+        }
+
+        /* Glitch Hover */
+        .glitch-hover:hover {
+            animation: glitch-anim 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: #fff;
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        /* Footer Background Animation */
+        .footer-bg-mesh {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(at 0% 100%, rgba(100, 100, 255, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(200, 50, 255, 0.05) 0px, transparent 50%);
+            z-index: 0;
+        }
+        
+        .perspective-grid {
+            position: absolute;
+            bottom: -50%;
+            left: -50%;
+            width: 200%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: center top;
+            animation: grid-move 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes grid-move {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(60px); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+
+    <!-- Dynamic Background Overlay -->
+    <div id="gradient-overlay"></div>
+
+    <div class="bg-grid"></div>
+    <canvas id="particles"></canvas>
+
+    <!-- Header -->
+    <header class="fixed top-0 w-full z-50 mix-blend-difference text-white p-6 flex justify-between items-center transition-all duration-300" id="main-header">
+        <a href="#" class="text-xl font-heading font-bold tracking-wider hover:opacity-70 transition-opacity relative z-50">PANIN.DEV</a>
+        
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex gap-8 text-sm font-medium tracking-widest uppercase">
+            <a href="#about" class="hover:text-gray-400 transition-colors">dev.</a>
+            <a href="cases.html" class="hover:text-gray-400 transition-colors">Кейсы</a>
+            <a href="marketplaces.html" class="hover:text-orange-400 transition-colors text-orange-500">Маркетплейсы</a>
+            <a href="#contact" class="hover:text-gray-400 transition-colors">Контакт</a>
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden relative z-50 w-10 h-10 flex flex-col justify-center items-end gap-1.5 group focus:outline-none">
+            <span class="w-8 h-0.5 bg-white transition-all duration-300 group-hover:w-6"></span>
+            <span class="w-6 h-0.5 bg-white transition-all duration-300 group-hover:w-8"></span>
+        </button>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-40 transform translate-x-full transition-transform duration-500 flex flex-col justify-center items-center">
+            <nav class="flex flex-col gap-8 text-center">
+                <a href="#about" class="text-3xl font-heading font-bold text-white hover:text-gray-400 transition-colors mobile-link">Инфо</a>
+                <a href="#work" class="text-3xl font-heading font-bold text-white hover:text-gray-400 transition-colors mobile-link">Услуги</a>
+                <a href="marketplaces.html" class="text-3xl font-heading font-bold text-orange-500 hover:text-gray-400 transition-colors mobile-link">Маркетплейсы</a>
+                <a href="#contact" class="text-3xl font-heading font-bold text-white hover:text-gray-400 transition-colors mobile-link">Контакт</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="min-h-screen flex items-center px-6 md:px-12 relative pt-20">
+            <div class="max-w-7xl w-full mx-auto">
+                <div class="overflow-hidden">
+                    <p class="text-sm md:text-base text-gray-400 mb-4 font-mono tracking-widest uppercase reveal-up">
+                        Digital Business Solution
+                    </p>
+                </div>
+                <h1 id="hero-title" class="text-[13.5vw] md:text-[8vw] leading-[0.85] font-black font-heading text-white mb-8 tracking-tighter transform-gpu will-change-transform">
+                    <div class="overflow-hidden"><span class="block reveal-up delay-100" data-bg="bg-gradient-blue">DIGITAL</span></div>
+                    <div class="overflow-hidden"><span class="block reveal-up delay-200" data-bg="bg-gradient-blue">BUSINESS</span></div>
+                    <div class="overflow-hidden"><span class="block reveal-up delay-300 text-transparent stroke-text" style="-webkit-text-stroke: 2px white; color: transparent;" data-bg="bg-gradient-purple">SOLUTION</span></div>
+                </h1>
+                
+                <div class="flex flex-col md:flex-row justify-between items-end border-t border-white/20 pt-8 mt-12 reveal-up delay-500">
+                    <div class="max-w-md text-gray-400 text-base md:text-lg leading-relaxed mb-8 md:mb-0">
+                        Комплексная упаковка бизнеса. <br>
+                        <span class="text-white font-semibold">12 лет</span> создаю активы, которые приносят прибыль.
+                    </div>
+                    <a href="#contact" class="group flex items-center gap-4 text-xl font-heading font-bold hover:gap-6 transition-all bg-gradient-to-r from-amber-600 to-rose-600 px-8 py-4 rounded-full hover:shadow-lg shadow-orange-500/20" data-bg="bg-gradient-gold">
+                        НАЧАТЬ ПРОЕКТ <span class="text-2xl">→</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About / Stats -->
+        <section id="about" class="py-20 md:py-32 border-t border-white/10 bg-black/50 backdrop-blur-sm">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+                    <div>
+                        <h2 class="text-4xl md:text-6xl font-heading font-bold mb-8 reveal-up">Экспертиза</h2>
+                        <p class="text-xl text-gray-400 leading-relaxed mb-8 reveal-up">
+                            Я не просто "делаю сайты". Я строю цифровые системы продаж. От первой строчки кода до первого лида в CRM. Моя задача — сделать так, чтобы ваш бизнес работал в интернете эффективно.
+                        </p>
+                        
+                        <!-- AI Badge/Text -->
+                        <div class="p-6 grad-line-top bg-red-800/5 shadow-[0_0_30px_rgba(3,202,252,0.1)] rounded-lg mb-8 reveal-up" data-bg="bg-gradient-red">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                <h3 class="font-heading font-bold text-white">AI-Powered Production</h3>
+                            </div>
+                            <p class="text-sm text-gray-400">
+                                Использую передовые технологии искусственного интеллекта для анализа данных, генерации уникального контента и ускорения разработки. 
+                                <span class="text-white/80">Вы получаете результат быстрее, качественнее и технологичнее конкурентов.</span>
+                            </p>
+                        </div>
+
+                        <div class="flex flex-wrap gap-4 reveal-up">
+                            <span class="px-4 py-2 border border-white/20 rounded-full text-sm font-mono hover:bg-white hover:text-black transition-colors">Web Development</span>
+                            <span class="px-4 py-2 border border-white/20 rounded-full text-sm font-mono hover:bg-white hover:text-black transition-colors">SEO Promotion</span>
+                            <span class="px-4 py-2 border border-white/20 rounded-full text-sm font-mono hover:bg-white hover:text-black transition-colors">Performance Ads</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div class="p-8 border border-white/10 hover:border-white transition-colors reveal-up delay-100 bg-[#0a0a0a]" data-bg="bg-gradient-blue">
+                            <div class="text-5xl font-heading font-bold mb-2 text-gradient">12+</div>
+                            <div class="text-sm text-gray-500 font-mono uppercase">Лет опыта</div>
+                        </div>
+                        <div class="p-8 border border-white/10 hover:border-white transition-colors reveal-up delay-200 bg-[#0a0a0a]" data-bg="bg-gradient-purple">
+                            <div class="text-5xl font-heading font-bold mb-2 text-gradient">100+</div>
+                            <div class="text-sm text-gray-500 font-mono uppercase">Проектов</div>
+                        </div>
+                        <div class="p-8 border border-white/10 hover:border-white transition-colors reveal-up delay-300 bg-[#0a0a0a] col-span-2" data-bg="bg-gradient-green">
+                            <div class="text-5xl font-heading font-bold mb-2 text-gradient">ROI</div>
+                            <div class="text-sm text-gray-500 font-mono uppercase">Ориентированность на прибыль</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services -->
+        <section id="work" class="py-20 md:py-32 px-6 md:px-12">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-sm font-mono text-gray-500 uppercase tracking-widest mb-16 reveal-up">Компетенции</h2>
+                
+                <div class="space-y-0">
+                    <!-- Service Item 1 -->
+                    <div class="group border-t border-white/20 hover:border-white transition-colors py-12 cursor-pointer line-reveal reveal-up" data-bg="bg-gradient-blue">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                            <h3 class="text-3xl md:text-5xl font-heading font-semibold group-hover:translate-x-6 group-hover:scale-105 origin-left duration-300 transition-transform">
+                                Разработка
+                            </h3>
+                            <p class="max-w-md text-gray-400 md:text-right group-hover:text-white transition-colors">
+                                React, Vue, SPA, E-commerce. Чистый код, микросервисная архитектура и высокая скорость загрузки.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Service Item 2 -->
+                    <div class="group border-t border-white/20 hover:border-white transition-colors py-12 cursor-pointer line-reveal reveal-up" data-bg="bg-gradient-cyan">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                            <h3 class="text-3xl md:text-5xl font-heading font-semibold group-hover:translate-x-6 group-hover:scale-105 origin-left duration-300 transition-transform">
+                                SEO Продвижение
+                            </h3>
+                            <p class="max-w-md text-gray-400 md:text-right group-hover:text-white transition-colors">
+                                Технический аудит, семантика, link building. Вывод в ТОП-3 по ВЧ запросам в Яндексе и Google.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Service Item 3 -->
+                    <div class="group border-t border-white/20 hover:border-white transition-colors py-12 cursor-pointer line-reveal reveal-up" data-bg="bg-gradient-green">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                            <h3 class="text-3xl md:text-5xl font-heading font-semibold group-hover:translate-x-6 group-hover:scale-105 origin-left duration-300 transition-transform">
+                                Реклама (Ads)
+                            </h3>
+                            <p class="max-w-md text-gray-400 md:text-right group-hover:text-white transition-colors">
+                                Яндекс Директ, VK Ads. Сквозная аналитика, оптимизация стоимости лида, масштабирование.
+                            </p>
+                        </div>
+                    </div>
+
+                     <!-- Service Item 4 -->
+                     <div class="group border-t border-white/20 hover:border-white transition-colors py-12 cursor-pointer line-reveal reveal-up" data-bg="bg-gradient-orange">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                            <h3 class="text-3xl md:text-5xl font-heading font-semibold group-hover:translate-x-6 group-hover:scale-105 origin-left duration-300 transition-transform">
+                                Маркетплейсы
+                            </h3>
+                            <p class="max-w-md text-gray-400 md:text-right group-hover:text-white transition-colors">
+                                WB, Ozon. Инфографика, SEO-оптимизация карточек, вывод товаров в ТОП, работа с внутренней рекламой.
+                            </p>
+                        </div>
+                    </div>
+
+                     <!-- Service Item 5 -->
+                     <div class="group border-t border-b border-white/20 hover:border-white transition-colors py-12 cursor-pointer line-reveal reveal-up" data-bg="bg-gradient-pink">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                            <h3 class="text-3xl md:text-5xl font-heading font-semibold group-hover:translate-x-6 group-hover:scale-105 origin-left duration-300 transition-transform">
+                                Дизайн UI/UX
+                            </h3>
+                            <p class="max-w-md text-gray-400 md:text-right group-hover:text-white transition-colors">
+                                Проектирование интерфейсов, которые продают. Удобство пользователя как приоритет.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA / Footer -->
+        <section id="contact" class="min-h-220 flex items-center justify-center px-0 md:px-12 relative overflow-hidden pt-20 bg-gradient  ">
+            <!-- New Background Elements -->
+            <div class="footer-bg-mesh"></div>
+            <div class="perspective-grid"></div>
+            <div class=" bg-gradient-to-t from-black/80 via-transparent to-black/70 pointer-events-none z-0 "></div>
+
+            <div class=" w-full relative  py-42 border-t border-b-5 border-white/10 bg-black/60 backdrop-blur-sm z-10">
+                <div class="text-center mb-16">
+                    <p class="text-sm font-mono text-gray-500 mb-8 reveal-up">СВЯЗЬ</p>
+                    <h2 class="text-5xl md:text-7xl font-heading font-bold tracking-tighter leading-none reveal-up delay-100 mb-6">
+                        ОБСУДИТЬ ПРОЕКТ
+                    </h2>
+                    <p class="text-gray-400 max-w-xl mx-auto reveal-up delay-200">
+                        Выберите удобный способ связи. Я отвечаю на все заявки в течение 2 часов в рабочее время.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto reveal-up delay-300">
+                    <!-- Telegram -->
+                    <a href="https://t.me/username" target="_blank" class="group relative p-6 border border-white/10 bg-black/40 backdrop-blur-md hover:bg-white hover:text-black transition-all duration-300 flex items-center gap-6 overflow-hidden" data-bg="bg-gradient-blue">
+                        <div class="w-12 h-12 flex items-center justify-center border border-white/20 rounded-full group-hover:border-black/20 transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 11.944 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                        </div>
+                        <div>
+                            <div class="text-xs font-mono uppercase tracking-wider text-gray-500 group-hover:text-black/60 mb-1">Messager</div>
+                            <div class="text-xl font-bold font-heading">Telegram</div>
+                        </div>
+                        <div class="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-2xl">→</div>
+                    </a>
+
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/79990000000" target="_blank" class="group relative p-6 border border-white/10 bg-black/40 backdrop-blur-md hover:bg-white hover:text-black transition-all duration-300 flex items-center gap-6 overflow-hidden" data-bg="bg-gradient-teal">
+                        <div class="w-12 h-12 flex items-center justify-center border border-white/20 rounded-full group-hover:border-black/20 transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                        </div>
+                        <div>
+                            <div class="text-xs font-mono uppercase tracking-wider text-gray-500 group-hover:text-black/60 mb-1">Chat</div>
+                            <div class="text-xl font-bold font-heading">WhatsApp</div>
+                        </div>
+                        <div class="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-2xl">→</div>
+                    </a>
+
+                    <!-- VKontakte -->
+                    <a href="https://vk.com/username" target="_blank" class="group relative p-6 border border-white/10 bg-black/40 backdrop-blur-md hover:bg-white hover:text-black transition-all duration-300 flex items-center gap-6 overflow-hidden" data-bg="bg-gradient-indigo">
+                        <div class="w-12 h-12 flex items-center justify-center border border-white/20 rounded-full group-hover:border-black/20 transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M13.162 18.994c.609 0 .858-.406.851-1.845-.008-1.522.503-2.268 1.775-2.268.925 0 1.631.568 2.398 1.864.61 1.035 1.068 1.787 1.84 1.974.838.204 1.64.055 1.64.055l3.205-.041s.806-.039.979-.609c.076-.25.015-.562-.196-.893-.433-.676-3.39-4.81-3.453-5.051-.047-.178-.016-.336.178-.626.025-.038 3.589-5.406 3.766-6.262.042-.205.01-.429-.326-.429l-3.335.02c-.275-.009-.485.085-.634.336-.855 1.444-2.968 4.554-3.21 4.777-.293.272-.447.167-.447-.893 0-2.562.358-3.534-.763-3.999-.338-.14-.653-.194-1.368-.194-2.076 0-2.65.352-2.884.687-.127.181-.032.492.381.539.749.085 1.26.493 1.26 2.639 0 .968-.123 2.287-.605 2.625-.281.197-.588.024-1.242-.959-1.783-2.68-3.053-5.395-3.053-5.395-.144-.359-.34-.507-.748-.507l-3.37.02c-.448.005-.608.239-.608.556 0 .425.626 2.639 3.042 6.064 2.314 3.28 5.527 4.949 8.532 4.949z"/></svg>
+                        </div>
+                        <div>
+                            <div class="text-xs font-mono uppercase tracking-wider text-gray-500 group-hover:text-black/60 mb-1">Social</div>
+                            <div class="text-xl font-bold font-heading">Vkontakte</div>
+                        </div>
+                        <div class="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-2xl">→</div>
+                    </a>
+
+                    <!-- Phone -->
+                    <a href="tel:+79990000000" class="group relative p-4 md:p-6 border border-white/10 bg-black/40 backdrop-blur-md hover:bg-white hover:text-black transition-all duration-300 flex items-center gap-3 md:gap-6 overflow-hidden" data-bg="bg-gradient-gold">
+                        <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center border border-white/20 rounded-full group-hover:border-black/20 transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-xs font-mono uppercase tracking-wider text-gray-500 group-hover:text-black/60 mb-1">Call</div>
+                            <div class="text-lg sm:text-xl font-bold font-heading whitespace-nowrap truncate">+7 (999) 000-00-00</div>
+                        </div>
+                        <div class="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-2xl">→</div>
+                    </a>
+                </div>
+
+                <footer class="w-full text-center text-xs text-gray-600 font-mono mt-24 relative z-20">
+                    &copy; 2023 PANIN.DEV - ALL RIGHTS RESERVED
+                </footer>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Interactive 3D Cards System ---
+        
+        // Initialize Card Parallax
+        const initCards = () => {
+            // Select interactive cards: Services, Stats, Contact buttons
+            const cards = document.querySelectorAll('#work .group, #about .border, #contact a.group, .parallax-card-target');
+            
+            cards.forEach(card => {
+                card.classList.add('parallax-card');
+                
+                // Add depth to children
+                const children = card.children;
+                for (let i = 0; i < children.length; i++) {
+                    children[i].classList.add('parallax-content');
+                }
+
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    // Calculate rotation (limit to 5 degrees)
+                    const rotateX = ((y - centerY) / centerY) * -5; 
+                    const rotateY = ((x - centerX) / centerX) * 5;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                });
+            });
+        };
+
+        // Run initialization
+        document.addEventListener('DOMContentLoaded', initCards);
+
+        // DOM Elements for Global Animations
+        const heroTitle = document.getElementById('hero-title');
+        const gradientOverlay = document.getElementById('gradient-overlay');
+
+        // Gradient Background Logic
+        let currentBgClass = '';
+        const bgTriggers = document.querySelectorAll('[data-bg]');
+        bgTriggers.forEach(trigger => {
+            trigger.addEventListener('mouseenter', () => {
+                const newBg = trigger.getAttribute('data-bg');
+                if (currentBgClass) gradientOverlay.classList.remove(currentBgClass);
+                gradientOverlay.classList.add(newBg);
+                gradientOverlay.classList.add('visible');
+                currentBgClass = newBg;
+            });
+            trigger.addEventListener('mouseleave', () => {
+                gradientOverlay.classList.remove('visible');
+            });
+        });
+
+        // --- Canvas Particles Optimization ---
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d', { alpha: true }); 
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const particleCount = window.innerWidth < 768 ? 20 : 40; 
+
+        class Particle {
+            constructor() {
+                this.init();
+            }
+            
+            init() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.2; 
+                this.vy = (Math.random() - 0.5) * 0.2;
+                this.size = Math.random() * 1.5 + 0.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+
+        // --- Main Animation Loop ---
+        // Mouse tracking for Hero Parallax only
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let targetX = mouseX;
+        let targetY = mouseY;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        const lerp = (start, end, factor) => start + (end - start) * factor;
+
+        function tick() {
+            // Hero Parallax Logic
+            if (heroTitle && window.scrollY < height) { 
+                targetX = lerp(targetX, mouseX, 0.1);
+                targetY = lerp(targetY, mouseY, 0.1);
+
+                const rotX = (targetY / height - 0.5) * 8;
+                const rotY = (targetX / width - 0.5) * 8;
+                heroTitle.style.transform = `perspective(1000px) rotateX(${-rotX}deg) rotateY(${rotY}deg)`;
+            }
+
+            // Canvas Drawing
+            ctx.clearRect(0, 0, width, height);
+            
+            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            
+            ctx.beginPath();
+            
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                p.update();
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const distSq = dx*dx + dy*dy;
+
+                    if (distSq < 22500) { 
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                    }
+                }
+            }
+            ctx.stroke();
+
+            requestAnimationFrame(tick);
+        }
+        tick();
+
+        // --- Scroll Reveal System ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+
+        // --- Mobile Menu Logic ---
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('translate-x-full');
+                document.body.style.overflow = 'hidden';
+                // Simple rotation for hamburger lines
+                mobileBtn.children[0].classList.add('rotate-45', 'translate-y-1.5');
+                mobileBtn.children[1].classList.add('-rotate-45', '-translate-y-1'); 
+            } else {
+                mobileMenu.classList.add('translate-x-full');
+                document.body.style.overflow = '';
+                mobileBtn.children[0].classList.remove('rotate-45', 'translate-y-1.5');
+                mobileBtn.children[1].classList.remove('-rotate-45', '-translate-y-1');
+            }
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+        
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (isMenuOpen) toggleMenu();
+            });
+        });
+    </script>
+</body>
+</html>

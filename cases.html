@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кейсы | Panin.dev</title>
+    <meta name="description" content="Реальные результаты работы: рост продаж, оптимизация маржинальности, выход в ТОП категорий на Wildberries и Ozon.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Unbounded:wght@300;400;600;800&display=swap');
+
+        :root {
+            --bg-color: #030303;
+            --grid-color: #1a1a1a;
+            --accent-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Unbounded', sans-serif;
+        }
+
+        /* Grid Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+                              linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+            opacity: 0.5;
+        }
+
+        /* Particles Canvas */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Full Screen Gradient Overlays */
+        #gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+            mix-blend-mode: screen;
+        }
+        
+        #gradient-overlay.visible {
+            opacity: 1;
+            transition: opacity 0.1s ease-out;
+        }
+
+        /* Gradients */
+        .bg-gradient-blue { background-image: radial-gradient(circle at 50% 50%, rgba(43, 50, 178, 0.6) 0%, rgba(20, 136, 204, 0.3) 50%, transparent 100%); }
+        .bg-gradient-purple { background-image: radial-gradient(circle at 50% 50%, rgba(142, 45, 226, 0.5) 0%, rgba(74, 0, 224, 0.3) 50%, transparent 100%); }
+        .bg-gradient-gold { background-image: radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.5) 0%, rgba(218, 32, 94, 0.3) 50%, transparent 100%); }
+        .bg-gradient-orange { background-image: radial-gradient(circle at 50% 50%, rgba(249, 115, 22, 0.6) 0%, rgba(251, 146, 60, 0.3) 50%, transparent 100%); }
+        .bg-gradient-green { background-image: radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.5) 0%, rgba(22, 163, 74, 0.3) 50%, transparent 100%); }
+
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Chart Animations */
+        @keyframes grow-bar {
+            from { height: 0; }
+            to { height: var(--h); }
+        }
+        @keyframes fill-chart {
+            from { width: 0; }
+            to { width: var(--w); }
+        }
+
+        /* Case Card Styles */
+        .case-card {
+            background: rgba(10, 10, 10, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
+        }
+
+        .case-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .case-image-placeholder {
+            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            height: 200px;
+        }
+
+        .case-image-placeholder::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M32 16L48 32L32 48L16 32L32 16Z' stroke='%23333' stroke-width='2'/%3E%3C/svg%3E");
+            opacity: 0.1;
+        }
+
+        .case-image-placeholder .label {
+            font-size: 12px;
+            font-family: 'Inter', monospace;
+            color: #555;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+
+        .case-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .case-result {
+            font-size: 2.25rem;
+            line-height: 1;
+            font-weight: 800;
+            background: linear-gradient(to right, #fff, #aaa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .case-metric {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+
+        .case-title {
+            font-size: 1.5rem;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        /* Category Filter */
+        .category-filter {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .category-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn.active {
+            background: white;
+            color: black;
+        }
+
+        .category-btn:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+            color: #ccc;
+        }
+
+        .category-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+
+    <div id="gradient-overlay"></div>
+    <div class="bg-grid"></div>
+    <canvas id="particles"></canvas>
+
+    <!-- Header -->
+    <header class="fixed top-0 w-full z-50 mix-blend-difference text-white p-6 flex justify-between items-center transition-all duration-300">
+        <a href="index.html" class="text-xl font-heading font-bold tracking-wider hover:opacity-70 transition-opacity relative z-50">PANIN.DEV</a>
+        
+        <nav class="hidden md:flex gap-8 text-sm font-medium tracking-widest uppercase">
+            <a href="index.html" class="hover:text-gray-400 transition-colors">dev.</a>
+            <a href="cases.html" class="text-white border-b border-white">Кейсы</a>
+            <a href="marketplaces.html" class="hover:text-gray-400 transition-colors">Marketplaces</a>
+        </nav>
+
+        <button id="mobile-menu-btn" class="md:hidden relative z-50 w-10 h-10 flex flex-col justify-center items-end gap-1.5 group focus:outline-none">
+            <span class="w-8 h-0.5 bg-white transition-all duration-300 group-hover:w-6"></span>
+            <span class="w-6 h-0.5 bg-white transition-all duration-300 group-hover:w-8"></span>
+        </button>
+
+        <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-40 transform translate-x-full transition-transform duration-500 flex flex-col justify-center items-center">
+            <nav class="flex flex-col gap-8 text-center">
+                <a href="index.html" class="text-3xl font-heading font-bold text-white hover:text-gray-400 transition-colors mobile-link">dev.</a>
+                <a href="cases.html" class="text-3xl font-heading font-bold text-white hover:text-gray-400 transition-colors mobile-link">Кейсы</a>
+                <a href="marketplaces.html" class="text-3xl font-heading font-bold text-white hover:text-gray-400 transition-colors mobile-link">Marketplaces</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="min-h-[50vh] flex items-end px-6 md:px-12 relative pb-20 pt-40">
+            <div class="max-w-7xl w-full mx-auto">
+                <div class="overflow-hidden">
+                    <p class="text-sm md:text-base text-gray-400 mb-4 font-mono tracking-widest uppercase reveal-up">
+                        Portfolio & Results
+                    </p>
+                </div>
+                <h1 class="text-[10vw] md:text-[6vw] leading-[0.9] font-black font-heading text-white mb-8 tracking-tighter reveal-up delay-100">
+                    РЕАЛЬНЫЕ <span class="text-transparent stroke-text" style="-webkit-text-stroke: 2px white;">КЕЙСЫ</span>
+                </h1>
+                <p class="text-xl text-gray-300 max-w-2xl reveal-up delay-200">
+                    Цифры говорят громче слов. Примеры того, как системный подход и аналитика меняют траекторию бизнеса.
+                </p>
+            </div>
+        </section>
+
+        <!-- Category Filter -->
+        <section class="py-6 px-6 md:px-12">
+            <div class="max-w-7xl mx-auto">
+                <div class="category-filter">
+                    <button class="category-btn active" data-category="all">Все кейсы</button>
+                    <button class="category-btn" data-category="electronics">Electronics</button>
+                    <button class="category-btn" data-category="apparel">Apparel</button>
+                    <button class="category-btn" data-category="home">Home</button>
+                    <button class="category-btn" data-category="beauty">Beauty</button>
+                    <button class="category-btn" data-category="pet">Pet Supplies</button>
+                    <button class="category-btn" data-category="tools">Tools</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cases Grid -->
+        <section class="py-12 px-6 md:px-12">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Case 1: Electronics -->
+                    <a href="cases/wb/crossovki.html" target="_blank" class="case-card reveal-up" data-bg="bg-gradient-orange" data-category="electronics">
+                        <div class="case-image-placeholder">
+                            <span class="label">График роста</span>
+                            <span class="case-badge bg-orange-500/20 text-orange-400">Electronics</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="case-title font-heading font-bold text-white">Кроссовки</h3>
+                            <p class="text-gray-400 text-sm mb-6">Wildberries • Выручка x6.5 за 4 месяца</p>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="case-result">6.5×</div>
+                                    <div class="case-metric">рост выручки</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="case-result text-orange-400">9%</div>
+                                    <div class="case-metric">ДРР</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Case 2: Apparel -->
+                    <a href="cases/wb/eleg-dress.html" target="_blank" class="case-card reveal-up delay-100" data-bg="bg-gradient-purple" data-category="apparel">
+                        <div class="case-image-placeholder">
+                            <span class="label">Анализ прибыли</span>
+                            <span class="case-badge bg-purple-500/20 text-purple-400">Apparel</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="case-title font-heading font-bold text-white">Элегантное платье</h3>
+                            <p class="text-gray-400 text-sm mb-6">Ozon • Чистая прибыль +18%</p>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="case-result">23%</div>
+                                    <div class="case-metric">чистая прибыль</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="case-result text-purple-400">0</div>
+                                    <div class="case-metric">кассовые разрывы</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Case 3: Home Goods -->
+                    <a href="cases/wb/halat-red.html" target="_blank" class="case-card reveal-up delay-200" data-bg="bg-gradient-green" data-category="home">
+                        <div class="case-image-placeholder">
+                            <span class="label">Топ позиции</span>
+                            <span class="case-badge bg-green-500/20 text-green-400">Home</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="case-title font-heading font-bold text-white">Красный халат</h3>
+                            <p class="text-gray-400 text-sm mb-6">Ozon & WB • ROI 45% на старте</p>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="case-result">TOP-10</div>
+                                    <div class="case-metric">в категории</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="case-result text-green-400">1.2M ₽</div>
+                                    <div class="case-metric">1-й месяц</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Case 4: Beauty -->
+                    <a href="cases/wb/mini-dress.html" target="_blank" class="case-card reveal-up delay-300" data-bg="bg-gradient-blue" data-category="beauty">
+                        <div class="case-image-placeholder">
+                            <span class="label">CTR-анализ</span>
+                            <span class="case-badge bg-blue-500/20 text-blue-400">Beauty</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="case-title font-heading font-bold text-white">Мини-платье</h3>
+                            <p class="text-gray-400 text-sm mb-6">Ozon • CTR +220%, органика +40%</p>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="case-result">4.2%</div>
+                                    <div class="case-metric">средний CTR</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="case-result text-blue-400">TOP-3</div>
+                                    <div class="case-metric">по 5 категориям</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Case 5: Pet Supplies -->
+                    <a href="cases/wb/palto.html" target="_blank" class="case-card reveal-up delay-400" data-bg="bg-gradient-gold" data-category="pet">
+                        <div class="case-image-placeholder">
+                            <span class="label">Продвижение через CTR</span>
+                            <span class="case-badge bg-yellow-500/20 text-yellow-400">Pet Supplies</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="case-title font-heading font-bold text-white">Пальто</h3>
+                            <p class="text-gray-400 text-sm mb-6">Wildberries • Старт с 0 до 800K/мес</p>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="case-result">3 мес</div>
+                                    <div class="case-metric">до прибыли</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="case-result text-yellow-400">72%</div>
+                                    <div class="case-metric">удержание</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Case 6: Tools -->
+                    <a href="cases/wb/pilesos.html" target="_blank" class="case-card reveal-up delay-500" data-bg="bg-gradient-blue" data-category="tools">
+                        <div class="case-image-placeholder">
+                            <span class="label">AI-аналитика</span>
+                            <span class="case-badge bg-cyan-500/20 text-cyan-400">Tools</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="case-title font-heading font-bold text-white">Пылесос</h3>
+                            <p class="text-gray-400 text-sm mb-6">Ozon Global • Снижение остатков на 37%</p>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="case-result">92%</div>
+                                    <div class="case-metric">точность прогноза</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="case-result text-cyan-400">-37%</div>
+                                    <div class="case-metric">остатки</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Case 7: Dentist -->
+                    <a href="cases/dantist.html" target="_blank" class="case-card reveal-up delay-100" data-bg="bg-gradient-purple" data-category="beauty">
+                        <div class="case-image-placeholder">
+                            <span class="label">Стоматология</span>
+                            <span class="case-badge bg-purple-500/20 text-purple-400">Dentist</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="case-title font-heading font-bold text-white">Dantist</h3>
+                            <p class="text-gray-400 text-sm mb-6">Онлайн-запись • Конверсия +35%</p>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="case-result">+35%</div>
+                                    <div class="case-metric">конверсия</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="case-result text-purple-400">TOP-3</div>
+                                    <div class="case-metric">в регионе</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Case 8: Kolonka -->
+                    <a href="cases/kolonka.html" target="_blank" class="case-card reveal-up delay-200" data-bg="bg-gradient-orange" data-category="electronics">
+                        <div class="case-image-placeholder">
+                            <span class="label">Звуковая колонка</span>
+                            <span class="case-badge bg-orange-500/20 text-orange-400">Kolonka</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="case-title font-heading font-bold text-white">Kolonka</h3>
+                            <p class="text-gray-400 text-sm mb-6">Wildberries • Оборот 1.8M/мес</p>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="case-result">1.8M</div>
+                                    <div class="case-metric">оборот/мес</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="case-result text-orange-400">12%</div>
+                                    <div class="case-metric">ДРР</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Case 9: Stilist -->
+                    <a href="cases/stilist.html" target="_blank" class="case-card reveal-up delay-300" data-bg="bg-gradient-green" data-category="apparel">
+                        <div class="case-image-placeholder">
+                            <span class="label">Персональный стилист</span>
+                            <span class="case-badge bg-green-500/20 text-green-400">Stilist</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="case-title font-heading font-bold text-white">Stilist</h3>
+                            <p class="text-gray-400 text-sm mb-6">Ozon • Маржа 35%</p>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="case-result">35%</div>
+                                    <div class="case-metric">маржа</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="case-result text-green-400">0</div>
+                                    <div class="case-metric">возвратов</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Case 10: Tattoo -->
+                    <a href="cases/tattoo.html" target="_blank" class="case-card reveal-up delay-400" data-bg="bg-gradient-gold" data-category="beauty">
+                        <div class="case-image-placeholder">
+                            <span class="label">Тату-мастер</span>
+                            <span class="case-badge bg-yellow-500/20 text-yellow-400">Tattoo</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="case-title font-heading font-bold text-white">Tattoo</h3>
+                            <p class="text-gray-400 text-sm mb-6">Личный бренд • Бронирование +60%</p>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="case-result">+60%</div>
+                                    <div class="case-metric">бронирование</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="case-result text-yellow-400">150+</div>
+                                    <div class="case-metric">клиентов/мес</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Case 11: Travel -->
+                    <a href="cases/travel.html" target="_blank" class="case-card reveal-up delay-500" data-bg="bg-gradient-blue" data-category="tools">
+                        <div class="case-image-placeholder">
+                            <span class="label">Путешествия</span>
+                            <span class="case-badge bg-cyan-500/20 text-cyan-400">Travel</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="case-title font-heading font-bold text-white">Travel</h3>
+                            <p class="text-gray-400 text-sm mb-6">Бронирование туров • ROI 200%</p>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="case-result">200%</div>
+                                    <div class="case-metric">ROI</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="case-result text-cyan-400">TOP-5</div>
+                                    <div class="case-metric">по региону</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Case 12: Travel2 -->
+                    <a href="cases/travel2.html" target="_blank" class="case-card reveal-up delay-600" data-bg="bg-gradient-purple" data-category="tools">
+                        <div class="case-image-placeholder">
+                            <span class="label">Экскурсии</span>
+                            <span class="case-badge bg-purple-500/20 text-purple-400">Travel2</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="case-title font-heading font-bold text-white">Travel2</h3>
+                            <p class="text-gray-400 text-sm mb-6">Индивидуальные туры • Прибыль 25%</p>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="case-result">25%</div>
+                                    <div class="case-metric">прибыль</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="case-result text-purple-400">100+</div>
+                                    <div class="case-metric">туров/мес</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="py-32 text-center px-6 border-t border-white/10">
+            <div class="max-w-2xl mx-auto reveal-up">
+                <h2 class="text-3xl md:text-5xl font-heading font-bold mb-8">Хотите такие же результаты?</h2>
+                <p class="text-gray-400 mb-12">
+                    Каждый проект уникален. Запишитесь на аудит, чтобы понять, где вы теряете деньги и как вырасти в 2-3 раза.
+                </p>
+                <a href="index.html#contact" class="inline-block bg-white text-black font-heading font-bold text-lg px-10 py-4 rounded-full hover:bg-gray-200 transition-colors">
+                    Заказать аудит магазина
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="w-full py-12 border-t border-white/10 bg-black relative z-10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-left">
+                <a href="index.html" class="text-xl font-heading font-bold text-white tracking-wider">PANIN.DEV</a>
+                <p class="text-gray-500 text-sm mt-2 max-w-xs">ИП Панин А.В.<br>Экспертное продвижение на маркетплейсах.</p>
+            </div>
+            
+            <div class="flex gap-6">
+                <a href="cases.html" class="text-white transition-colors text-sm border-b border-white/50">Кейсы</a>
+                <a href="index.html#contact" class="text-gray-400 hover:text-white transition-colors text-sm">Контакты</a>
+            </div>
+
+            <div class="text-right text-xs text-gray-600 font-mono">
+                &copy; 2025 — ИП Панин А.В.<br>
+                Партнёр Ozon Global Seller Program<br>
+                Сертифицированный эксперт VK Ads Business
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Gradient Overlay
+        const gradientOverlay = document.getElementById('gradient-overlay');
+        const bgTriggers = document.querySelectorAll('[data-bg]');
+        let currentBgClass = '';
+        bgTriggers.forEach(trigger => {
+            trigger.addEventListener('mouseenter', () => {
+                const newBg = trigger.getAttribute('data-bg');
+                if (currentBgClass) gradientOverlay.classList.remove(currentBgClass);
+                gradientOverlay.classList.add(newBg);
+                gradientOverlay.classList.add('visible');
+                currentBgClass = newBg;
+            });
+            trigger.addEventListener('mouseleave', () => {
+                gradientOverlay.classList.remove('visible');
+            });
+        });
+
+        // Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+
+        // Mobile Menu
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        let isMenuOpen = false;
+        mobileBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('translate-x-full');
+                document.body.style.overflow = 'hidden';
+                mobileBtn.children[0].classList.add('rotate-45', 'translate-y-1.5');
+                mobileBtn.children[1].classList.add('-rotate-45', '-translate-y-1'); 
+            } else {
+                mobileMenu.classList.add('translate-x-full');
+                document.body.style.overflow = '';
+                mobileBtn.children[0].classList.remove('rotate-45', 'translate-y-1.5');
+                mobileBtn.children[1].classList.remove('-rotate-45', '-translate-y-1');
+            }
+        });
+
+        // Simple Particles
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d', { alpha: true });
+        let width, height;
+        let particles = [];
+        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+        const particleCount = window.innerWidth < 768 ? 20 : 40;
+        class Particle {
+            constructor() { this.init(); }
+            init() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.2;
+                this.vy = (Math.random() - 0.5) * 0.2;
+                this.size = Math.random() * 1.5 + 0.5;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if (this.x < 0) this.x = width; if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height; if (this.y > height) this.y = 0;
+            }
+        }
+        for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+        function tick() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            particles.forEach(p => {
+                p.update();
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+            });
+            requestAnimationFrame(tick);
+        }
+        tick();
+
+        // Category Filter Functionality
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                const category = btn.dataset.category;
+                const cases = document.querySelectorAll('.case-card');
+                
+                cases.forEach(caseCard => {
+                    if (category === 'all' || caseCard.dataset.category === category) {
+                        caseCard.style.display = 'block';
+                    } else {
+                        caseCard.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
